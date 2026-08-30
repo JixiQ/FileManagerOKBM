@@ -5,6 +5,8 @@ namespace FileManagerOKBM
 {
     public partial class MainWin : Form
     {
+        private readonly CreateTable _CreateTable = new CreateTable();
+
         public MainWin()
         {
             InitializeComponent();
@@ -17,65 +19,26 @@ namespace FileManagerOKBM
 
         private void SearchButton_Click(object sender, EventArgs e)
         {
-            string path = PathToDirectory.Text.Trim();
+            string pathText = PathToDirectory.Text.Trim();
 
-            var filesInfo = new List<FileInfoData>();
-
-            try
-            {
-                foreach (string item in Directory.GetFileSystemEntries(path))
-                {
-                    string fullPath = Path.Combine(path, item);
-
-
-                    if (Directory.Exists(fullPath))
-                    {
-                        // Это папка
-                        var dirInfo = new DirectoryInfo(fullPath);
-                        filesInfo.Add(new FileInfoData
-                        {
-                            NameFile = dirInfo.Name,
-                            Extension = "Папка",                 
-                            SizeBytes = 0,
-                            LastWriteTime = dirInfo.LastWriteTime
-                        });
-                    }
-                    else if (File.Exists(fullPath))
-                    {
-                        // Это файл
-                        var fileInfo = new FileInfo(fullPath);
-                        filesInfo.Add(new FileInfoData
-                        {
-                            NameFile = fileInfo.Name,
-                            Extension = fileInfo.Extension,      
-                            SizeBytes = fileInfo.Length,
-                            LastWriteTime = fileInfo.LastWriteTime
-                        });
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка: {ex.Message}");
-                return;
-            }
-
-            dataGridView1.DataSource = null;
-            dataGridView1.DataSource = filesInfo;
-
+            _CreateTable.PopulateGrid(dataGridView1, pathText);
         }
-    
-        public class FileInfoData
-        {
-            public string NameFile { get; set; }
-            public string Extension { get; set; }      
-            public long SizeBytes { get; set; }  
-            public DateTime LastWriteTime { get; set; }
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
 
+            var row = dataGridView1.Rows[e.RowIndex];
+            var fileData = row.DataBoundItem as CreateTable.FileInfoData;
+            //MessageBox.Show(fileData.FullPath);
+
+            if (e.RowIndex < 0) return; // по столбцу
+
+            if (Directory.Exists(fileData.FullPath))   // Это папка
+            {
+                string pathText = fileData.FullPath;
+                _CreateTable.PopulateGrid(dataGridView1, pathText);
+            }
+
+            // если файл
         }
 
     }

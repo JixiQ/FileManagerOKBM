@@ -1,4 +1,6 @@
-﻿namespace FileManagerOKBM
+﻿using System.ComponentModel;
+
+namespace FileManagerOKBM
 {
     partial class MainWin
     {
@@ -31,16 +33,18 @@
             SearchButton = new Button();
             PathToDirectory = new TextBox();
             dataGridView1 = new DataGridView();
+            SizeText = new DataGridViewTextBoxColumn();
             NameFile = new DataGridViewTextBoxColumn();
             Extension = new DataGridViewTextBoxColumn();
-            SizeBytes = new DataGridViewTextBoxColumn();
             LastWriteTime = new DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // SearchButton
             // 
+            SearchButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             SearchButton.BackColor = Color.Transparent;
+            SearchButton.ImageAlign = ContentAlignment.BottomRight;
             SearchButton.Location = new Point(1201, 614);
             SearchButton.Name = "SearchButton";
             SearchButton.Size = new Size(89, 23);
@@ -51,6 +55,7 @@
             // 
             // PathToDirectory
             // 
+            PathToDirectory.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             PathToDirectory.Location = new Point(12, 615);
             PathToDirectory.Name = "PathToDirectory";
             PathToDirectory.PlaceholderText = "Введите путь до каталога";
@@ -62,48 +67,60 @@
             // 
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.AllowUserToOrderColumns = true;
+            dataGridView1.AllowUserToResizeColumns = false;
+            dataGridView1.AllowUserToResizeRows = false;
+            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.BackgroundColor = Color.DarkGray;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { NameFile, Extension, SizeBytes, LastWriteTime });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { NameFile, Extension, SizeText, LastWriteTime });
             dataGridView1.GridColor = Color.DarkGray;
-            dataGridView1.Location = new Point(12, 12);
+            dataGridView1.Location = new Point(0, 0);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
-            dataGridView1.Size = new Size(1278, 596);
+            dataGridView1.Size = new Size(1306, 596);
             dataGridView1.TabIndex = 2;
-            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            dataGridView1.CellDoubleClick += dataGridView1_CellDoubleClick;
+            dataGridView1.AutoGenerateColumns = false;
             // 
             // NameFile
             // 
+
             NameFile.DataPropertyName = "NameFile";
-            NameFile.FillWeight = 5000F;
+            NameFile.FillWeight = 150F;
             NameFile.HeaderText = "Имя файла";
+            NameFile.MinimumWidth = 60;
             NameFile.Name = "NameFile";
             NameFile.ReadOnly = true;
             NameFile.SortMode = DataGridViewColumnSortMode.NotSortable;
-            NameFile.Width = 975;
+            //
+            // SizeText
+            // 
+            SizeText.DataPropertyName = "SizeText";
+            SizeText.FillWeight = 20F;
+            SizeText.HeaderText = "Размер файла";
+            SizeText.MinimumWidth = 60;
+            SizeText.Name = "SizeText";
+            SizeText.ReadOnly = true;
+            SizeText.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
             // Extension
             // 
             Extension.DataPropertyName = "Extension";
+            Extension.FillWeight = 20F;
             Extension.HeaderText = "Тип файла";
+            Extension.MinimumWidth = 60;
             Extension.Name = "Extension";
             Extension.ReadOnly = true;
             Extension.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
-            // SizeBytes
-            // 
-            SizeBytes.DataPropertyName = "SizeBytes";
-            SizeBytes.HeaderText = "Размер файла";
-            SizeBytes.Name = "SizeBytes";
-            SizeBytes.ReadOnly = true;
-            SizeBytes.SortMode = DataGridViewColumnSortMode.NotSortable;
-            // 
             // LastWriteTime
             // 
             LastWriteTime.DataPropertyName = "LastWriteTime";
+            LastWriteTime.FillWeight = 20F;
             LastWriteTime.HeaderText = "Дата изменения";
+            LastWriteTime.MinimumWidth = 60;
             LastWriteTime.Name = "LastWriteTime";
             LastWriteTime.ReadOnly = true;
             LastWriteTime.SortMode = DataGridViewColumnSortMode.NotSortable;
@@ -113,13 +130,13 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.WindowFrame;
-            ClientSize = new Size(1301, 649);
+            ClientSize = new Size(1306, 651);
             Controls.Add(dataGridView1);
             Controls.Add(PathToDirectory);
             Controls.Add(SearchButton);
             Name = "MainWin";
             Text = "MainWin";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -131,7 +148,7 @@
         private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn NameFile;
         private DataGridViewTextBoxColumn Extension;
-        private DataGridViewTextBoxColumn SizeBytes;
+        private DataGridViewTextBoxColumn SizeText;
         private DataGridViewTextBoxColumn LastWriteTime;
     }
 }
