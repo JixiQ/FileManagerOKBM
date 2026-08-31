@@ -32,44 +32,55 @@ namespace FileManagerOKBM
                 {
                     string fullPath = Path.Combine(pathText, item);
 
-
-                    if (Directory.Exists(fullPath))   // Это папка
+                    try
                     {
-                        var dirInfo = new DirectoryInfo(fullPath);
-
-                        long totalSize = 0;
-
-                        foreach (string file in Directory.EnumerateFiles(fullPath, "*",SearchOption.AllDirectories))
+                        if (Directory.Exists(fullPath))   // Это папка
                         {
-                            totalSize += new FileInfo(file).Length;
+                            var dirInfo = new DirectoryInfo(fullPath);
+
+                            long totalSize = 0;
+
+                            foreach (string file in Directory.EnumerateFiles(fullPath, "*", SearchOption.AllDirectories))
+                            {
+                                totalSize += new FileInfo(file).Length;
+                            }
+
+                            filesInfo.Add(new FileInfoData
+                            {
+                                NameFile = dirInfo.Name,
+                                Extension = "Папка",
+
+                                SizeBytes = totalSize,
+                                SizeText = FormatSize(totalSize),
+
+                                LastWriteTime = dirInfo.LastWriteTime,
+                                FullPath = fullPath
+                            });
                         }
-
-                        filesInfo.Add(new FileInfoData
+                        else if (File.Exists(fullPath))   // Это файл
                         {
-                            NameFile = dirInfo.Name,
-                            Extension = "Папка",
+                            var fileInfo = new FileInfo(fullPath);
+                            filesInfo.Add(new FileInfoData
+                            {
+                                NameFile = fileInfo.Name,
+                                Extension = fileInfo.Extension,
 
-                            SizeBytes = totalSize,
-                            SizeText = FormatSize(totalSize),
+                                SizeBytes = fileInfo.Length,
+                                SizeText = FormatSize(fileInfo.Length),
 
-                            LastWriteTime = dirInfo.LastWriteTime,
-                            FullPath = fullPath
-                        });
+                                LastWriteTime = fileInfo.LastWriteTime,
+                                FullPath = fullPath
+                            });
+                        }
                     }
-                    else if (File.Exists(fullPath))   // Это файл
+                    catch (UnauthorizedAccessException ex)
                     {
-                        var fileInfo = new FileInfo(fullPath);
-                        filesInfo.Add(new FileInfoData
-                        {
-                            NameFile = fileInfo.Name,
-                            Extension = fileInfo.Extension,
-
-                            SizeBytes = fileInfo.Length,
-                            SizeText = FormatSize(fileInfo.Length),
-
-                            LastWriteTime = fileInfo.LastWriteTime,
-                            FullPath = fullPath
-                        });
+                        //MessageBox.Show($"Нет доступа к конкретному файлу или папке. {ex.Message}{fullPath}");
+                        continue;
+                    }
+                    catch (IOException)
+                    {
+                        continue;
                     }
                 }
             }
